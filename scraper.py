@@ -30,19 +30,17 @@ class WebScraper:
 
 	# The following function retrieves demographic data from a given city 
 	#Argument(s): name of city (string)
-    #Return(s): Pandas data frame containing demographic data 
+	#Return(s): Pandas data frame containing demographic data 
 	@staticmethod
 	def getDemographics():
 		package = apiRequest()
 
 		for idx, resource in enumerate(package["result"]["resources"]):
-	
-    	if resource["datastore_active"]:
-	        url = "https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search"
-	        p = { "id": resource["id"] }
-	        data = requests.get(url, params = p).json()
-	        df = pd.DataFrame(data["result"]["records"])
-	        break
-		df
 
-		
+			if resource["datastore_active"]:
+				url = "https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search"
+				p = { "id": resource["id"] }
+				data = requests.get(url, params = p).json()
+				df = pd.DataFrame(data["result"]["records"])
+				break
+		df
