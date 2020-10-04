@@ -14,7 +14,7 @@ import time
 import random
 import pandas as pd 
 
-class WebScraper:
+class CollateData:
 
 	@staticmethod
 	def apiRequest():
@@ -28,11 +28,8 @@ class WebScraper:
 
 		return package
 
-	# The following function retrieves demographic data from a given city 
-	#Argument(s): name of city (string)
-	#Return(s): Pandas data frame containing demographic data 
 	@staticmethod
-	def getDemographics():
+	def getData():
 		package = apiRequest()
 
 		for idx, resource in enumerate(package["result"]["resources"]):
@@ -43,4 +40,16 @@ class WebScraper:
 				data = requests.get(url, params = p).json()
 				df = pd.DataFrame(data["result"]["records"])
 				break
-		df
+
+		return df
+
+	@staticmethod
+	def getNeighbourhoods(language):
+		data = getData()
+
+		categories = df['Category']
+
+		for elem in categories:
+		    print(elem)
+		    if elem == "Language":
+		        print("success")
