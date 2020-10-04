@@ -42,7 +42,7 @@ class WebScraper:
 
 	# The following function retrieves demographic data from a given city 
 	#Argument(s): name of city (string)
-    #Return(s): 2D vector containing population data 
+   	#Return(s): 2D vector containing population data 
 	@staticmethod
 	def getDemographics(city):
 		wikiUrl = "https://en.m.wikipedia.org/wiki/Demographics_of_" + city 
