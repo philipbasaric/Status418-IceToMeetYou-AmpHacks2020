@@ -8,12 +8,6 @@
 #                                                                     
 ######################################################################
 
-from urllib.error import HTTPError
-from urllib.error import URLError
-from urllib.request import urlopen
-from urllib.request import urlretrieve
-import wikipediaapi
-from bs4 import BeautifulSoup
 import requests
 import re
 import time 
@@ -24,37 +18,31 @@ class WebScraper:
 
 	@staticmethod
 	def apiRequest():
-		article = articleName
-		api_version = "rest_v1"
-		api_base_url = f"https://wikimedia.org/api/{api_version}"
-		endpoint_path = f"/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/{article}/monthly/2015100100/2020060100"
+		api_version = "3"
+		api_base_url = f"https://ckan0.cf.opendata.inter.prod-toronto.ca/api/{api_version}"
+		endpoint_path = f"action/package_show"
 		endpoint = f"{api_base_url}{endpoint_path}"
+		params = { "id": "6e19a90f-971c-46b3-852c-0c48c436d1fc"}
 
-		r = requests.get(endpoint)
+		package = requests.get(endpoint, params = params).json()
 
-		data_dict = r.json()
-
+		return package
 
 	# The following function retrieves demographic data from a given city 
 	#Argument(s): name of city (string)
-   	#Return(s): 2D vector containing population data 
+    #Return(s): Pandas data frame containing demographic data 
 	@staticmethod
-	def getDemographics(city):
-		wikiUrl = "https://en.m.wikipedia.org/wiki/Demographics_of_" + city 
+	def getDemographics():
+		package = apiRequest()
 
-		try:
-			html = urlopen(wikiUrl)
-		except HTTPError as e:
-			print('Page not found')
-		except URLError as e:
-			print('The server could not be found')
-		else:
-			print('Retrieval successful.')
-
-		bs = BeautifulSoup(html.read(), 'html.parser')
-
-		bs.find_all('table')
-
-		df = pd.read_html((bs.find_all('table')))
+		for idx, resource in enumerate(package["result"]["resources"]):
+	
+    	if resource["datastore_active"]:
+	        url = "https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search"
+	        p = { "id": resource["id"] }
+	        data = requests.get(url, params = p).json()
+	        df = pd.DataFrame(data["result"]["records"])
+	        break
+		df
 
 		
