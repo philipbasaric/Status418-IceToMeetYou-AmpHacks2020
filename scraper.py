@@ -34,11 +34,6 @@ class WebScraper:
 
 		data_dict = r.json()
 
-		try:
-			list_data = data_dict['items']
-			return sortPopularLinks.getViews(list_data)
-		except Exception as e:
-			return 0
 
 	# The following function retrieves demographic data from a given city 
 	#Argument(s): name of city (string)
